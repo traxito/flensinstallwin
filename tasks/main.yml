@@ -2,26 +2,12 @@
 #playbook to install Flens Agent on Windows
 # Alex Montesinos 2021
 
-- name: Copy Telegraf from file [Windows / Intel]
-  ansible.windows.win_copy:
-    src: telegraf-1.17.3_windows_i386.zip
-    dest: C:\Downloads
-  when: ansible_processor.[0] == GenuineIntel
-
-- name: Copy Telegraf from file [Windows / AMD]
+- name: Copy Telegraf from file [Windows]
   ansible.windows.win_copy:
     src: telegraf-1.17.3_windows_amd64.zip
     dest: C:\Downloads
-  when: ansible_processor.[0] == AMD
 
-- name: Unzipp files to destination [Windows / Intel]
-  community.windows.win_unzip:
-    src: C:\Downloads\telegraf-1.17.3_windows_i386.zip
-    dest: C:\Program Files\InfluxData\Telegraf
-    recurse: yes
-    delete_archive: yes
-
-- name: Unzipp files to destination [Windows / AMD]
+- name: Unzipp files to destination [Windows]
   community.windows.win_unzip:
     src: C:\Downloads\telegraf-1.17.3_windows_amd64.zip
     dest: C:\Program Files\InfluxData\Telegraf
