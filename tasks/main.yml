@@ -1,6 +1,5 @@
 ---
 #playbook to install Flens Agent on Windows
-# Alex Montesinos 2021
 
 - name: Create the Telegraf Directory
   win_file:
