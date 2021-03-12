@@ -13,7 +13,7 @@
 
 - name: Copy config file
   win_copy:
-    src: telegraf.conf.{{ ansible_hostname }}
+    src: telegraf.conf.{{ ansible_hostname | lower }}
     dest: C:\Program Files\InfluxData\Telegraf\telegraf.conf
 
 - name: Create the service with Powershell
