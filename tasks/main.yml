@@ -2,29 +2,27 @@
 #playbook to install Flens Agent on Windows
 # Alex Montesinos 2021
 
-- name: Copy Telegraf from file [Windows]
-  ansible.windows.win_copy:
-    src: telegraf-1.17.3_windows_amd64.zip
-    dest: C:\Downloads
+- name: Create the Telegraf Directory
+  win_file:
+    path: C:\Program Files\InfluxData\Telegraf\
+    state: directory
 
-- name: Unzipp files to destination [Windows]
-  community.windows.win_unzip:
-    src: C:\Downloads\telegraf-1.17.3_windows_amd64.zip
-    dest: C:\"Program Files"\InfluxData\Telegraf
-    recurse: yes
-    delete_archive: yes   
+- name: Copy Telegraf executable from Ansible Server
+  win_copy:
+    src: telegraf.exe
+    dest: C:\Program Files\InfluxData\Telegraf\
 
 - name: Copy config file
-  copy:
-    src: telegraf.conf{ ansible_hostname }
-    dest: C:\"Program Files"\InfluxData\Telegraf
+  win_copy:
+    src: telegraf.conf.{{ ansible_hostname }}
+    dest: C:\Program Files\InfluxData\Telegraf\telegraf.conf
 
 - name: Create the service with Powershell
-  ansible.windows.win_shell: |
-    C:\"Program Files"\InfluxData\Telegraf\telegraf.exe --service install --config C:\"Program Files"\InfluxData\Telegraf\telegraf.conf
+  win_shell: |
+     cd "C:\Program Files\InfluxData\Telegraf"; .\Telegraf.exe --service install --config 'C:\Program Files\InfluxData\Telegraf\telegraf.conf'
 
-- name: Start the Windows Service  
-  ansible.windows.win_service:
+- name: Start the Windows Service
+  win_service:
     name: telegraf
     start_mode: auto
     state: started
