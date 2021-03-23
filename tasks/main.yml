@@ -3,22 +3,27 @@
 
 - name: Create the Telegraf Directory
   win_file:
-    path: C:\Program Files\InfluxData\Telegraf\
+    path: C:\Program Files\Telegraf\telegraf.d
     state: directory
 
 - name: Copy Telegraf executable from Ansible Server
   win_copy:
     src: telegraf.exe
-    dest: C:\Program Files\InfluxData\Telegraf\
+    dest: C:\Program Files\Telegraf\telegraf.exe
 
 - name: Copy config file
   win_copy:
-    src: telegraf.conf.{{ ansible_hostname | lower }}
-    dest: C:\Program Files\InfluxData\Telegraf\telegraf.conf
+    src: telegraf.conf.{{ ansible_hostname | upper }}
+    dest: C:\Program Files\Telegraf\telegraf.conf
+
+- name: Copy services file
+  win_copy:
+    src: win_service.telegraf.conf.{{ ansible_hostname | lower }}
+    dest: C:\Program Files\Telegraf\telegraf.d\win_service.telegraf.conf
 
 - name: Create the service with Powershell
   win_shell: |
-     cd "C:\Program Files\InfluxData\Telegraf"; .\Telegraf.exe --service install --config 'C:\Program Files\InfluxData\Telegraf\telegraf.conf'
+     cd "C:\Program Files\Telegraf"; .\Telegraf.exe --service install --config-directory 'C:\Program Files\Telegraf'
 
 - name: Start the Windows Service
   win_service:
