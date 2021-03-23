@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tasks:
+
+#playbook to install Flens Agent on Windows
+  #- name: Remove the service with Powershell
+  #  win_shell: |
+  #    cd "C:\Program Files\InfluxData\Telegraf"; .\Telegraf.exe --service uninstall
+  - name: Remove the Telegraf Service
+    win_service:
+      name: telegraf
+      state: absent
+
+  - name: Clean the Installation Path
+    win_file:
+      path: 'C:\Program Files\InfluxData\'
+      state: absent
